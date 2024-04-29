@@ -1,14 +1,35 @@
-const box = '2x3x4';
+const fs = require('node:fs');
 
-const dimensions = box.split('x');
+const data = fs.readFileSync('data.txt', 'utf-8');
+const boxes = data.split('\r\n');
 
-const length = dimensions[0];
-const width = dimensions[1];
-const height = dimensions[2];
+let total = 0;
+boxes.forEach(box => {
+	const dimensions = box.split('x');
 
-const surfaceArea = 2 * (length * width + width * height + length * height);
+	const length = Number(dimensions[0]);
+	const width = Number(dimensions[1]);
+	const height = Number(dimensions[2]);
 
-const sides = [length * width, width * height, length * height];
+	const volume = length * width * height;
 
-if (sides[0] <= sides[1] && sides[0] <= sides[2]) {
-}
+	let perimeter;
+	if (length * width <= width * height && length * width <= length * height) {
+		perimeter = length * 2 + width * 2;
+	} else if (
+		width * height <= length * width &&
+		width * height <= length * height
+	) {
+		perimeter = width * 2 + height * 2;
+	} else if (
+		length * height <= length * width &&
+		length * height <= width * height
+	) {
+		perimeter = length * 2 + height * 2;
+	}
+
+	const ribbon = volume + perimeter;
+	total += ribbon;
+});
+
+console.log(total);
